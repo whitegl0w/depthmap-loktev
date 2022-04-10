@@ -109,9 +109,9 @@ def read_image(path):
     if img.ndim == 2:
         img = cv2.cvtColor(img, cv2.COLOR_GRAY2BGR)
 
-    img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB) / 255.0
+    img2 = cv2.cvtColor(img, cv2.COLOR_BGR2RGB) / 255.0
 
-    return img
+    return img, img2
 
 
 def resize_image(img):
@@ -162,6 +162,7 @@ def resize_depth(depth, width, height):
     )
 
     return depth_resized
+
 
 def write_depth(path, depth, bits=1):
     """Write depth map to pfm and png file.

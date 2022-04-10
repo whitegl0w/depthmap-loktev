@@ -2,6 +2,8 @@
 """
 import os
 import glob
+
+import numpy as np
 import torch
 import utils
 import cv2
@@ -22,7 +24,7 @@ def run(input_path, output_path, model_path):
     print("initialize")
 
     # select device
-    device = torch.device("cpu")
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print("device: %s" % device)
 
     # load network
@@ -63,7 +65,7 @@ def run(input_path, output_path, model_path):
 
         # input
 
-        img = utils.read_image(img_name)
+        img_raw, img = utils.read_image(img_name)
         img_input = transform({"image": img})["image"]
 
         # compute
@@ -88,6 +90,10 @@ def run(input_path, output_path, model_path):
         )
         utils.write_depth(filename, prediction, bits=2)
 
+        depth_map = cv2.imread(filename + ".png")
+        out = np.concatenate((depth_map, img_raw))
+        cv2.imwrite(filename + "_concat.png", out)
+
     print("finished")
 
 
@@ -95,7 +101,6 @@ if __name__ == "__main__":
     # set paths
     INPUT_PATH = "input"
     OUTPUT_PATH = "output"
-    # MODEL_PATH = "model.pt"
     MODEL_PATH = "model.pt"
 
     # set torch options
