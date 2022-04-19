@@ -99,6 +99,8 @@ def run(input_path, output_path, model_path):
 
 if __name__ == "__main__":
     # set paths
+    path, _ = os.path.split(os.path.abspath(__file__))
+    os.chdir(path)
     INPUT_PATH = "input"
     OUTPUT_PATH = "output"
     MODEL_PATH = "model.pt"
